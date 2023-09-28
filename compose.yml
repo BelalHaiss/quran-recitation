@@ -5,7 +5,7 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - docker-data:/data
+      - quran-backup:/data
 
     restart: always
 
@@ -14,13 +14,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin_pass
       MYSQL_DATABASE: quran-app
-      MYSQL_USER: root
-      MYSQL_PASSWORD: admin_pass
+
     ports:
-      - 3360:3306
+      - 3307:3306
     volumes:
-      - docker-data:/var/lib/mysql
+      - quran-backup:/var/lib/mysql
     restart: always
 
 volumes:
-  docker-data:
+  quran-backup:
