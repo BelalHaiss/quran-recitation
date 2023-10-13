@@ -2,37 +2,29 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AdminLoginDto, AdminRigsterDto } from '../auth/dto/admin.auth.dto';
 import * as argon2 from 'argon2';
 import { Manager } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { usernameOrEmailField } from '../auth/util/auth.utl';
 import { PrismaService } from 'src/shared/prisma.service';
+import { QuranValidator } from 'src/shared/quran/quran.service';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private quranValidator: QuranValidator,
+  ) {}
 
   async createAdmin(adminData: AdminRigsterDto) {
-    try {
-      const hash = await argon2.hash(adminData.password);
-      adminData.password = hash;
-      await this.prismaService.manager.create({
-        data: { ...adminData, created_at: new Date() },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002')
-          throw new HttpException(
-            `this ${error.meta!.target} alread exists`,
-            HttpStatus.CONFLICT,
-          );
-        throw error;
-      }
-      throw error;
-    }
+    const hash = await argon2.hash(adminData.password);
+    adminData.password = hash;
+    await this.prismaService.manager.create({
+      data: { ...adminData, created_at: new Date() },
+    });
   }
 
   async adminPasswordLogin(adminLogin: AdminLoginDto) {
     const manager = await this.prismaService.manager.findUniqueOrThrow({
-      where: usernameOrEmailField(adminLogin.usernameOrEmail),
+      where: {
+        email: adminLogin.email,
+      },
     });
     const isPasswordMatch = await argon2.verify(
       manager.password,

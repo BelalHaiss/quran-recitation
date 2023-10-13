@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { usernameOrEmailField } from '../auth/util/auth.utl';
 import {
   studentLoginDto,
   studentRigsterDto,
@@ -17,7 +16,7 @@ export class StudentsService {
     try {
       const hash = await argon2.hash(studentData.password);
       studentData.password = hash;
-      await this.prismaService.manager.create({
+      await this.prismaService.student.create({
         data: { ...studentData, created_at: new Date() },
       });
     } catch (error) {
@@ -35,7 +34,9 @@ export class StudentsService {
 
   async studentPasswordLogin(studentDto: studentLoginDto) {
     const student = await this.prismaService.student.findUniqueOrThrow({
-      where: usernameOrEmailField(studentDto.usernameOrEmail),
+      where: {
+        email: studentDto.email,
+      },
     });
     const isPasswordMatch = await argon2.verify(
       student.password,

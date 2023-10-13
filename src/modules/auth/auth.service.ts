@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { She5LoginDto, She5RigsterDto } from './dto/she5.auth.dto';
 import { seedAdmin } from './util/seed.utl';
 import { studentLoginDto, studentRigsterDto } from './dto/student-register.dto';
+import { UsersTypes } from 'src/shared/types/user.types';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -17,11 +18,15 @@ export class AuthService implements OnModuleInit {
     private jwtService: JwtService,
   ) {}
 
-  onModuleInit() {
-    this.registerAdmin(seedAdmin);
+  async onModuleInit() {
+    try {
+      await this.registerAdmin(seedAdmin);
+    } catch (error) {
+      return;
+    }
   }
-  async generateAcessToken(userId: number, username: string) {
-    const payload = { sub: userId, username };
+  async generateAcessToken(userId: number, userType: UsersTypes) {
+    const payload = { sub: userId, userType };
     const token = await this.jwtService.signAsync(payload);
     return token;
   }
@@ -35,7 +40,7 @@ export class AuthService implements OnModuleInit {
     const manger = await this.adminService.adminPasswordLogin(adminDto);
     const access_token = await this.generateAcessToken(
       manger.manger_id,
-      manger.username,
+      'manager',
     );
     return { access_token, manger };
   }
@@ -47,10 +52,7 @@ export class AuthService implements OnModuleInit {
   // she5 login
   async she5Login(she5Dto: She5LoginDto) {
     const she5 = await this.she5Service.she5Login(she5Dto);
-    const access_token = await this.generateAcessToken(
-      she5.she5_id,
-      she5.username,
-    );
+    const access_token = await this.generateAcessToken(she5.she5_id, 'she5');
     return { access_token, she5 };
   }
 
@@ -63,7 +65,7 @@ export class AuthService implements OnModuleInit {
     const student = await this.studentService.studentPasswordLogin(studentDto);
     const access_token = await this.generateAcessToken(
       student.student_id,
-      student.username,
+      'student',
     );
     return { access_token, student };
   }

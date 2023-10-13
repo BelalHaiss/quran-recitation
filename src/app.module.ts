@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { She5Module } from './modules/she5/she5.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CategoryModule } from './modules/category/category.module';
+import { QuranModule } from './shared/quran/quran.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { AuthModule } from './modules/auth/auth.module';
     She5Module,
     AdminModule,
     AuthModule,
+    CategoryModule,
+    QuranModule,
   ],
   controllers: [AppController],
   providers: [AppService],

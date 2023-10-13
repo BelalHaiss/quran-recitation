@@ -4,9 +4,6 @@ export class studentRigsterDto {
   @IsString()
   name: string;
 
-  @IsString()
-  username: string;
-
   @IsEmail()
   email: string;
 
@@ -15,8 +12,8 @@ export class studentRigsterDto {
 }
 
 export class studentLoginDto {
-  @IsString()
-  usernameOrEmail: string;
+  @IsEmail()
+  email: string;
 
   @Length(8)
   password: string;

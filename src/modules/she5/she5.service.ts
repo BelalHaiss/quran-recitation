@@ -3,7 +3,6 @@ import { She5RigsterDto, She5LoginDto } from '../auth/dto/she5.auth.dto';
 import * as argon2 from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { She5 } from '@prisma/client';
-import { usernameOrEmailField } from '../auth/util/auth.utl';
 import { PrismaService } from 'src/shared/prisma.service';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class She5Service {
     try {
       const hash = await argon2.hash(she5Dto.password);
       she5Dto.password = hash;
-      await this.prismaService.manager.create({
+      await this.prismaService.she5.create({
         data: { ...she5Dto, created_at: new Date() },
       });
     } catch (error) {
@@ -32,7 +31,9 @@ export class She5Service {
 
   async she5Login(she5Dto: She5LoginDto) {
     const she5 = await this.prismaService.she5.findUniqueOrThrow({
-      where: usernameOrEmailField(she5Dto.usernameOrEmail),
+      where: {
+        email: she5Dto.email,
+      },
     });
     const isPasswordMatch = await argon2.verify(
       she5.password,
