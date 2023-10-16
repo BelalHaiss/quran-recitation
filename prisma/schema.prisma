@@ -123,6 +123,7 @@ model QuranLesson{
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt @default(now()) 
   
+  
   student_lessons StudentLesson[]
   @@map("quran_lesson")
 }

@@ -3,7 +3,7 @@ import { AdminLoginDto, AdminRigsterDto } from '../auth/dto/admin.auth.dto';
 import * as argon2 from 'argon2';
 import { Manager } from '@prisma/client';
 import { PrismaService } from 'src/shared/prisma.service';
-import { QuranValidator } from 'src/modules/quran/quran.service';
+import { QuranValidator } from 'src/shared/quran/quran.service';
 
 @Injectable()
 export class AdminService {
