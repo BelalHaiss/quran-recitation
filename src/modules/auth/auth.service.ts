@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { She5LoginDto, She5RigsterDto } from './dto/she5.auth.dto';
 import { seedAdmin } from './util/seed.utl';
 import { studentLoginDto, studentRigsterDto } from './dto/student-register.dto';
-import { UsersTypes } from 'src/shared/types/user.types';
+import { Role } from 'src/shared/types/user.types';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -25,7 +25,7 @@ export class AuthService implements OnModuleInit {
       return;
     }
   }
-  async generateAcessToken(userId: number, userType: UsersTypes) {
+  async generateAcessToken(userId: number, userType: Role) {
     const payload = { sub: userId, userType };
     const token = await this.jwtService.signAsync(payload);
     return token;
@@ -40,7 +40,7 @@ export class AuthService implements OnModuleInit {
     const manger = await this.adminService.adminPasswordLogin(adminDto);
     const access_token = await this.generateAcessToken(
       manger.manger_id,
-      'manager',
+      Role.Manger,
     );
     return { access_token, manger };
   }
@@ -52,7 +52,7 @@ export class AuthService implements OnModuleInit {
   // she5 login
   async she5Login(she5Dto: She5LoginDto) {
     const she5 = await this.she5Service.she5Login(she5Dto);
-    const access_token = await this.generateAcessToken(she5.she5_id, 'she5');
+    const access_token = await this.generateAcessToken(she5.she5_id, Role.She5);
     return { access_token, she5 };
   }
 
@@ -65,7 +65,7 @@ export class AuthService implements OnModuleInit {
     const student = await this.studentService.studentPasswordLogin(studentDto);
     const access_token = await this.generateAcessToken(
       student.student_id,
-      'student',
+      Role.Student,
     );
     return { access_token, student };
   }

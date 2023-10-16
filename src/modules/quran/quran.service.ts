@@ -1,12 +1,8 @@
 import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
-import { Surah_Info } from '../types/quran';
+import { Surah_Info } from '../../shared/types/quran';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class QuranValidator {
-  constructor() {
-    console.log('quran validator Init');
-  }
-
   private readonly surahs_info: Surah_Info[] = [
     {
       name: {
