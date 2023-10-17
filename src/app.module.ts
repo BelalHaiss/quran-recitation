@@ -5,11 +5,11 @@ import { She5Module } from './modules/she5/she5.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
-import { QuranModule } from './modules/quran/quran.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RoleGuard } from './guards/Role.guard';
 import { QuranLessonModule } from './modules/lesson/quran_lesson/quran_lesson.module';
 import { StorageModule } from './modules/storage/storage.module';
+import { CacheModuleModule } from './shared/cache-module/cache-module.module';
 
 @Module({
   imports: [
@@ -19,9 +19,9 @@ import { StorageModule } from './modules/storage/storage.module';
     AdminModule,
     AuthModule,
     CategoryModule,
-    QuranModule,
     QuranLessonModule,
     StorageModule,
+    CacheModuleModule,
   ],
   providers: [
     {

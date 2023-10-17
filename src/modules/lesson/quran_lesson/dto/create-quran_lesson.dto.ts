@@ -1,5 +1,5 @@
 import { QuranLesson } from '@prisma/client';
-import { IsNumber, IsString, IsUrl } from 'class-validator';
+import { IsInt, IsString, IsUrl } from 'class-validator';
 import { OmitDateFields } from 'src/shared/types/util.types';
 import { Type } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
@@ -11,15 +11,15 @@ export class CreateQuranLessonDto
     >
 {
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   surah_id: number;
 
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   ayah_from: number;
 
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   ayah_to: number;
 
   @IsUrl()

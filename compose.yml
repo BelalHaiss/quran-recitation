@@ -4,7 +4,7 @@ services:
     container_name: wratel-redis
     image: redis
     ports:
-      - 6379:6379
+      - 6397:6379
     volumes:
       - quran-backup:/data
 

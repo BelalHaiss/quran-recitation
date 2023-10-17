@@ -3,14 +3,10 @@ import { AdminLoginDto, AdminRigsterDto } from '../auth/dto/admin.auth.dto';
 import * as argon2 from 'argon2';
 import { Manager } from '@prisma/client';
 import { PrismaService } from 'src/shared/prisma.service';
-import { QuranValidator } from 'src/modules/quran/quran.service';
 
 @Injectable()
 export class AdminService {
-  constructor(
-    private readonly prismaService: PrismaService,
-    private quranValidator: QuranValidator,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createAdmin(adminData: AdminRigsterDto) {
     const hash = await argon2.hash(adminData.password);

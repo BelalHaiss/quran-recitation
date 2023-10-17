@@ -17,12 +17,13 @@ import {
 import { UpdateQuranLessonDto } from './dto/update-quran_lesson.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Public } from 'src/guards/decorator/public.decorator';
+import { Roles } from 'src/guards/decorator/role.decorator';
+import { Role } from 'src/shared/types/user.types';
 
 @Controller('quran-lesson')
 export class QuranLessonController {
   constructor(private readonly quranLessonService: QuranLessonService) {}
-
-  @Public()
+  @Roles([Role.Manger])
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -47,6 +48,7 @@ export class QuranLessonController {
     },
   ) {
     const { audio, pdf } = files;
+
     files_validation(audio, pdf);
     // upload files get url
     return this.quranLessonService.create(
@@ -56,20 +58,35 @@ export class QuranLessonController {
     );
   }
 
-  @Get()
-  findAll() {
-    return this.quranLessonService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.quranLessonService.findOne(+id);
   }
 
+  @Roles([Role.Manger])
   @Patch(':id')
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'audio', maxCount: 1 },
+        { name: 'pdf', maxCount: 1 },
+      ],
+      {
+        limits: {
+          files: 2,
+          fileSize: 10 * 1024 * 1024,
+        },
+      },
+    ),
+  )
   update(
     @Param('id') id: string,
     @Body() updateQuranLessonDto: UpdateQuranLessonDto,
+    @UploadedFiles()
+    files: {
+      audio: Express.Multer.File[];
+      pdf: Express.Multer.File[];
+    },
   ) {
     return this.quranLessonService.update(+id, updateQuranLessonDto);
   }

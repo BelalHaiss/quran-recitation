@@ -805,11 +805,48 @@ export class QuranValidator {
   ];
 
   validate(surahIndex: number, verses: [number, number]) {
+    if (verses[0] > verses[1] || verses[0] === verses[1])
+      throw new HttpException(
+        'ayah from shoud be smaller that ayah to',
+        HttpStatus.FORBIDDEN,
+      );
+
     if (surahIndex < 0 || surahIndex < 113)
       throw new HttpException('surah index wrong', HttpStatus.FORBIDDEN);
 
     const maxVersesCount = this.surahs_info[surahIndex].versesCount;
     if (verses.some((ayah) => ayah < 0 || ayah > maxVersesCount))
       throw new HttpException('verses numbers are wrong', HttpStatus.FORBIDDEN);
+  }
+}
+
+import { PipeTransform } from '@nestjs/common';
+
+@Injectable()
+export class QuranValidatorPipe implements PipeTransform {
+  private readonly surahs_info: Surah_Info[] = [
+    { name: { ar: 'ar', en: 'en' }, versesCount: 2 },
+  ];
+
+  transform(value: any) {
+    const { surahIndex, verses } = value;
+
+    if (verses[0] > verses[1] || verses[0] === verses[1]) {
+      throw new HttpException(
+        'ayah from should be smaller than ayah to',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    if (surahIndex < 0 || surahIndex >= 113) {
+      throw new HttpException('surah index is wrong', HttpStatus.FORBIDDEN);
+    }
+
+    const maxVersesCount = this.surahs_info[surahIndex].versesCount;
+    if (verses.some((ayah) => ayah < 0 || ayah > maxVersesCount)) {
+      throw new HttpException('verse numbers are wrong', HttpStatus.FORBIDDEN);
+    }
+
+    return value;
   }
 }

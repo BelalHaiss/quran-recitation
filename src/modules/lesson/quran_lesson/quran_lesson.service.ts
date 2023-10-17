@@ -15,8 +15,7 @@ export class QuranLessonService {
     audio: Express.Multer.File,
     pdf: Express.Multer.File,
   ) {
-    const audio_url = await this.storageService.uploadFile(audio, 'audio');
-    const pdf_url = await this.storageService.uploadFile(pdf, 'pdf');
+    const { audio_url, pdf_url } = await this.handleFiles(audio, pdf);
 
     return this.prismaService.quranLesson.create({
       data: {
@@ -27,17 +26,30 @@ export class QuranLessonService {
       },
     });
   }
+  private async handleFiles(
+    audio: Express.Multer.File,
+    pdf: Express.Multer.File,
+  ) {
+    const audio_url = await this.storageService.uploadFile(audio, 'audio');
+    const pdf_url = await this.storageService.uploadFile(pdf, 'pdf');
 
-  findAll() {
-    return `This action returns all quranLesson`;
+    return { audio_url, pdf_url };
   }
-
   findOne(id: number) {
-    return `This action returns a #${id} quranLesson`;
+    return this.prismaService.quranLesson.findUniqueOrThrow({
+      where: {
+        lesson_id: id,
+      },
+    });
   }
 
   update(id: number, updateQuranLessonDto: UpdateQuranLessonDto) {
-    return `This action updates a #${id} quranLesson`;
+    return this.prismaService.quranLesson.update({
+      where: {
+        lesson_id: id,
+      },
+      data: updateQuranLessonDto,
+    });
   }
 
   remove(id: number) {
