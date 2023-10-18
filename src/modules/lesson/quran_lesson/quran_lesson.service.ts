@@ -5,6 +5,7 @@ import { StorageService } from 'src/modules/storage/storage.service';
 import { PrismaService } from 'src/shared/prisma.service';
 import { Quran_Lesson_Files } from 'src/shared/types/files.types';
 import { QuranLesson } from '@prisma/client';
+import { Lesson_Info } from 'src/shared/types/quran';
 
 @Injectable()
 export class QuranLessonService {
@@ -16,7 +17,10 @@ export class QuranLessonService {
     createQuranLessonDto: CreateQuranLessonDto,
     files: Quran_Lesson_Files,
   ) {
-    const { audio_url, pdf_url } = await this.handleFiles(files);
+    const { audio_url, pdf_url } = await this.handleFiles(
+      files,
+      createQuranLessonDto,
+    );
 
     return this.prismaService.quranLesson.create({
       data: {
@@ -27,22 +31,27 @@ export class QuranLessonService {
       },
     });
   }
-  private async handleFiles(files: Quran_Lesson_Files) {
+  private async handleFiles(files: Quran_Lesson_Files, info: Lesson_Info) {
     const { audio, pdf } = files;
-    let uploadedFiles: { audio_url?: string; pdf_url?: string };
+    console.log(audio, pdf, 'audip', 'pdf');
+    const uploadedFiles = {
+      audio_url: '',
+      pdf_url: '',
+    };
     if (audio) {
       uploadedFiles.audio_url = await this.storageService.uploadFile(
         audio[0],
         'audio',
+        info,
       );
     }
     if (pdf) {
       uploadedFiles.pdf_url = await this.storageService.uploadFile(
         pdf[0],
         'pdf',
+        info,
       );
     }
-
     return uploadedFiles;
   }
   findOne(id: number) {
@@ -58,7 +67,10 @@ export class QuranLessonService {
     updateQuranLessonDto: UpdateQuranLessonDto,
     files: Quran_Lesson_Files,
   ) {
-    const { audio_url, pdf_url } = await this.handleFiles(files);
+    const { audio_url, pdf_url } = await this.handleFiles(
+      files,
+      updateQuranLessonDto,
+    );
     const updatedFields: Partial<QuranLesson> = updateQuranLessonDto;
     if (audio_url) updatedFields.audio_url = audio_url;
     if (pdf_url) updatedFields.pdf_url = pdf_url;

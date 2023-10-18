@@ -38,17 +38,13 @@ export const files_validation = (
   files: Quran_Lesson_Files,
   isUpdate?: boolean,
 ) => {
-  const { pdf, audio } = files;
-
-  if (isUpdate) {
-    if (pdf) validateType(pdf[0], 'pdf');
-    if (audio) validateType(audio[0], 'audio');
-  } else {
-    if (!audio || !pdf)
-      throw new BadRequestException('make sure to have pdf + audio files');
-    validateType(audio[0], 'audio');
-    validateType(pdf[0], 'pdf');
+  const { audio, pdf } = files;
+  if (!isUpdate && (!audio || !pdf)) {
+    throw new BadRequestException('make sure to have pdf + audio files');
   }
+  Object.keys(files).forEach((key: keyof Quran_Lesson_Files) => {
+    validateType(files[key][0], key.toString() as 'pdf' | 'audio');
+  });
 };
 const validateType = (file: Express.Multer.File, type: 'pdf' | 'audio') => {
   if (!file.mimetype.includes(type))

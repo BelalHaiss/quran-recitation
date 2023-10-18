@@ -5,3 +5,9 @@ export type Surah_Info = {
   };
   versesCount: number;
 };
+
+// use for naming convension when saving files to cloud storage
+export type Lesson_Info = Pick<
+  QuranLesson,
+  'ayah_from' | 'ayah_to' | 'surah_id'
+>;

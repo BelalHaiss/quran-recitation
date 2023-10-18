@@ -18,17 +18,18 @@ export class QuranValidatorPipe implements PipeTransform {
     if (metadata.type !== 'body') return value; // custom interceptor for multer
     const { surah_id, ayah_from, ayah_to } = await value;
 
+    if (!surah_id || !ayah_from || !ayah_to)
+      throw new ForbiddenException('invalid data');
+
     const verses = [ayah_from, ayah_to];
     if (surah_id < 0 || surah_id > 113)
       throw new ForbiddenException('surahid must be 0 : 113 ');
-    console.log(surah_id, typeof surah_id, 'surah id ');
     const currentSurah: Surah_Info = await this.cacheService.getItem(
       'lIndex',
       CacheKeys.SURAHS_INFO_LIST,
       surah_id,
     );
 
-    console.log({ currentSurah }, currentSurah.versesCount);
     const maxVersesCount = currentSurah.versesCount;
 
     if (

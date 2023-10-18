@@ -82,6 +82,7 @@ export class QuranLessonController {
     @UploadedFiles()
     files: Quran_Lesson_Files,
   ) {
+    files_validation(files, true);
     return this.quranLessonService.update(+id, updateQuranLessonDto, files);
   }
 
