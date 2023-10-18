@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
+  UsePipes,
 } from '@nestjs/common';
 import { QuranLessonService } from './quran_lesson.service';
 import {
@@ -19,12 +20,15 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Public } from 'src/guards/decorator/public.decorator';
 import { Roles } from 'src/guards/decorator/role.decorator';
 import { Role } from 'src/shared/types/user.types';
+import { QuranValidatorPipe } from 'src/pipes/validation/quran.pipe';
+import { Quran_Lesson_Files } from 'src/shared/types/files.types';
 
 @Controller('quran-lesson')
 export class QuranLessonController {
   constructor(private readonly quranLessonService: QuranLessonService) {}
   @Roles([Role.Manger])
   @Post()
+  @UsePipes(QuranValidatorPipe)
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -42,28 +46,21 @@ export class QuranLessonController {
   create(
     @Body() createQuranLessonDto: CreateQuranLessonDto,
     @UploadedFiles()
-    files: {
-      audio: Express.Multer.File[];
-      pdf: Express.Multer.File[];
-    },
+    files: Quran_Lesson_Files,
   ) {
-    const { audio, pdf } = files;
-
-    files_validation(audio, pdf);
+    files_validation(files);
     // upload files get url
-    return this.quranLessonService.create(
-      createQuranLessonDto,
-      audio[0],
-      pdf[0],
-    );
+    return this.quranLessonService.create(createQuranLessonDto, files);
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.quranLessonService.findOne(+id);
   }
 
   @Roles([Role.Manger])
+  @UsePipes(QuranValidatorPipe)
   @Patch(':id')
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -83,12 +80,9 @@ export class QuranLessonController {
     @Param('id') id: string,
     @Body() updateQuranLessonDto: UpdateQuranLessonDto,
     @UploadedFiles()
-    files: {
-      audio: Express.Multer.File[];
-      pdf: Express.Multer.File[];
-    },
+    files: Quran_Lesson_Files,
   ) {
-    return this.quranLessonService.update(+id, updateQuranLessonDto);
+    return this.quranLessonService.update(+id, updateQuranLessonDto, files);
   }
 
   @Delete(':id')

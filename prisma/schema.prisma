@@ -113,7 +113,7 @@ model QuranLesson{
   lesson_id Int @id @default(autoincrement()) 
   category_id Int
   category Category @relation(fields: [category_id] , references: [category_id]) 
-  surah_id Int @db.UnsignedTinyInt
+  surah_id Int @db.UnsignedTinyInt 
   ayah_from Int @db.SmallInt
   ayah_to Int @db.SmallInt
   video_url String 

@@ -3,6 +3,8 @@ import { CreateQuranLessonDto } from './dto/create-quran_lesson.dto';
 import { UpdateQuranLessonDto } from './dto/update-quran_lesson.dto';
 import { StorageService } from 'src/modules/storage/storage.service';
 import { PrismaService } from 'src/shared/prisma.service';
+import { Quran_Lesson_Files } from 'src/shared/types/files.types';
+import { QuranLesson } from '@prisma/client';
 
 @Injectable()
 export class QuranLessonService {
@@ -12,10 +14,9 @@ export class QuranLessonService {
   ) {}
   async create(
     createQuranLessonDto: CreateQuranLessonDto,
-    audio: Express.Multer.File,
-    pdf: Express.Multer.File,
+    files: Quran_Lesson_Files,
   ) {
-    const { audio_url, pdf_url } = await this.handleFiles(audio, pdf);
+    const { audio_url, pdf_url } = await this.handleFiles(files);
 
     return this.prismaService.quranLesson.create({
       data: {
@@ -26,14 +27,23 @@ export class QuranLessonService {
       },
     });
   }
-  private async handleFiles(
-    audio: Express.Multer.File,
-    pdf: Express.Multer.File,
-  ) {
-    const audio_url = await this.storageService.uploadFile(audio, 'audio');
-    const pdf_url = await this.storageService.uploadFile(pdf, 'pdf');
+  private async handleFiles(files: Quran_Lesson_Files) {
+    const { audio, pdf } = files;
+    let uploadedFiles: { audio_url?: string; pdf_url?: string };
+    if (audio) {
+      uploadedFiles.audio_url = await this.storageService.uploadFile(
+        audio[0],
+        'audio',
+      );
+    }
+    if (pdf) {
+      uploadedFiles.pdf_url = await this.storageService.uploadFile(
+        pdf[0],
+        'pdf',
+      );
+    }
 
-    return { audio_url, pdf_url };
+    return uploadedFiles;
   }
   findOne(id: number) {
     return this.prismaService.quranLesson.findUniqueOrThrow({
@@ -43,12 +53,20 @@ export class QuranLessonService {
     });
   }
 
-  update(id: number, updateQuranLessonDto: UpdateQuranLessonDto) {
+  async update(
+    id: number,
+    updateQuranLessonDto: UpdateQuranLessonDto,
+    files: Quran_Lesson_Files,
+  ) {
+    const { audio_url, pdf_url } = await this.handleFiles(files);
+    const updatedFields: Partial<QuranLesson> = updateQuranLessonDto;
+    if (audio_url) updatedFields.audio_url = audio_url;
+    if (pdf_url) updatedFields.pdf_url = pdf_url;
     return this.prismaService.quranLesson.update({
       where: {
         lesson_id: id,
       },
-      data: updateQuranLessonDto,
+      data: updatedFields,
     });
   }
 

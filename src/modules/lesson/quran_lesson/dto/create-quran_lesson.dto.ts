@@ -3,6 +3,7 @@ import { IsInt, IsString, IsUrl } from 'class-validator';
 import { OmitDateFields } from 'src/shared/types/util.types';
 import { Type } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
+import { Quran_Lesson_Files } from 'src/shared/types/files.types';
 export class CreateQuranLessonDto
   implements
     OmitDateFields<
@@ -34,11 +35,22 @@ export class CreateQuranLessonDto
 }
 
 export const files_validation = (
-  audio: Express.Multer.File[],
-  pdf: Express.Multer.File[],
+  files: Quran_Lesson_Files,
+  isUpdate?: boolean,
 ) => {
-  if (!audio || !pdf)
-    throw new BadRequestException('make sure to have pdf + audio files');
-  if (!audio[0].mimetype.includes('audio') || !pdf[0].mimetype.includes('/pdf'))
+  const { pdf, audio } = files;
+
+  if (isUpdate) {
+    if (pdf) validateType(pdf[0], 'pdf');
+    if (audio) validateType(audio[0], 'audio');
+  } else {
+    if (!audio || !pdf)
+      throw new BadRequestException('make sure to have pdf + audio files');
+    validateType(audio[0], 'audio');
+    validateType(pdf[0], 'pdf');
+  }
+};
+const validateType = (file: Express.Multer.File, type: 'pdf' | 'audio') => {
+  if (!file.mimetype.includes(type))
     throw new BadRequestException('invalid file type  ');
 };
