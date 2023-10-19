@@ -53,6 +53,12 @@ export class QuranLessonController {
     return this.quranLessonService.create(createQuranLessonDto, files);
   }
 
+  @Roles([Role.Manger])
+  @Get('surah/:id')
+  findSurahLessons(@Param('id') id: string) {
+    return this.quranLessonService.findSurahLessons(+id);
+  }
+
   @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -1,3 +1,5 @@
+import { QuranLesson } from '@prisma/client';
+
 export type Surah_Info = {
   name: {
     en: string;

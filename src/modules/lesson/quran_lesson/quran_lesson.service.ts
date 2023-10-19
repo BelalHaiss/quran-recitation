@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateQuranLessonDto } from './dto/create-quran_lesson.dto';
 import { UpdateQuranLessonDto } from './dto/update-quran_lesson.dto';
 import { StorageService } from 'src/modules/storage/storage.service';
-import { PrismaService } from 'src/shared/prisma.service';
 import { Quran_Lesson_Files } from 'src/shared/types/files.types';
 import { QuranLesson } from '@prisma/client';
 import { Lesson_Info } from 'src/shared/types/quran';
+import { QuranRepository } from './quran_lesson_repository';
 
 @Injectable()
 export class QuranLessonService {
   constructor(
     private storageService: StorageService,
-    private prismaService: PrismaService,
+    private quranRepository: QuranRepository,
   ) {}
   async create(
     createQuranLessonDto: CreateQuranLessonDto,
@@ -22,18 +22,15 @@ export class QuranLessonService {
       createQuranLessonDto,
     );
 
-    return this.prismaService.quranLesson.create({
-      data: {
-        ...createQuranLessonDto,
-        category_id: 1,
-        audio_url,
-        pdf_url,
-      },
+    return this.quranRepository.create({
+      ...createQuranLessonDto,
+      category_id: 1,
+      audio_url,
+      pdf_url,
     });
   }
   private async handleFiles(files: Quran_Lesson_Files, info: Lesson_Info) {
     const { audio, pdf } = files;
-    console.log(audio, pdf, 'audip', 'pdf');
     const uploadedFiles = {
       audio_url: '',
       pdf_url: '',
@@ -54,13 +51,6 @@ export class QuranLessonService {
     }
     return uploadedFiles;
   }
-  findOne(id: number) {
-    return this.prismaService.quranLesson.findUniqueOrThrow({
-      where: {
-        lesson_id: id,
-      },
-    });
-  }
 
   async update(
     id: number,
@@ -74,15 +64,17 @@ export class QuranLessonService {
     const updatedFields: Partial<QuranLesson> = updateQuranLessonDto;
     if (audio_url) updatedFields.audio_url = audio_url;
     if (pdf_url) updatedFields.pdf_url = pdf_url;
-    return this.prismaService.quranLesson.update({
-      where: {
-        lesson_id: id,
-      },
-      data: updatedFields,
-    });
+    return this.quranRepository.updateById(id, updateQuranLessonDto);
+  }
+
+  findOne(id: number) {
+    return this.quranRepository.findById(id);
+  }
+  async findSurahLessons(id: number) {
+    return this.quranRepository.findLessonsBySurahId(id);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} quranLesson`;
+    return this.quranRepository.removeById(id);
   }
 }
