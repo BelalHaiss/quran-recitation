@@ -23,10 +23,10 @@ import { Role } from 'src/shared/types/user.types';
 import { QuranValidatorPipe } from 'src/pipes/validation/quran.pipe';
 import { Quran_Lesson_Files } from 'src/shared/types/files.types';
 
+@Roles([Role.Manger])
 @Controller('quran-lesson')
 export class QuranLessonController {
   constructor(private readonly quranLessonService: QuranLessonService) {}
-  @Roles([Role.Manger])
   @Post()
   @UsePipes(QuranValidatorPipe)
   @UseInterceptors(
@@ -53,7 +53,6 @@ export class QuranLessonController {
     return this.quranLessonService.create(createQuranLessonDto, files);
   }
 
-  @Roles([Role.Manger])
   @Get('surah/:id')
   findSurahLessons(@Param('id') id: string) {
     return this.quranLessonService.findSurahLessons(+id);
@@ -65,7 +64,6 @@ export class QuranLessonController {
     return this.quranLessonService.findOne(+id);
   }
 
-  @Roles([Role.Manger])
   @UsePipes(QuranValidatorPipe)
   @Patch(':id')
   @UseInterceptors(

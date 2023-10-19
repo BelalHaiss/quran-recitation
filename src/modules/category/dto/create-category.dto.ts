@@ -3,7 +3,7 @@ import { IsEnum, IsString } from 'class-validator';
 import { OmitDateFields } from 'src/shared/types/util.types';
 
 export class CreateCategoryDto
-  implements OmitDateFields<Category, 'image' | 'category_id'>
+  implements OmitDateFields<Category, 'category_id'>
 {
   @IsString()
   label: string;

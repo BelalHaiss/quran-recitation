@@ -103,7 +103,6 @@ model Category{
   label String
   created_at DateTime @default(now()) 
   quranLesson QuranLesson[]
-  image String?
   updated_at DateTime @updatedAt @default(now())  
  @@map("category")
 }

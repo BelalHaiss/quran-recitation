@@ -18,7 +18,7 @@ export class globalExceptionFilter implements ExceptionFilter {
           ? `This ${target} already exists`
           : exception.name;
         response.status(HttpStatus.CONFLICT).json({ message });
-        console.dir('Prisma error', exception);
+        console.log('Prisma error', exception);
       } else {
         console.log('unhandeld error', exception);
         response

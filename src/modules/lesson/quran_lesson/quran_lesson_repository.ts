@@ -67,7 +67,6 @@ export class QuranRepository {
         OR  ( NOT EXISTS(SELECT 1 from quran_lesson WHERE surah_id = ${surah_id}) AND ${ayah_from} = 1 ) 
         LIMIT 1
         `;
-    console.log({ result });
     return result.length > 0;
   }
 
