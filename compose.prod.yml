@@ -33,7 +33,7 @@ services:
     restart: always
     environment:
       - DATABASE_URL=mysql://root:admin_pass@mysql:3306/quran-app
-    command: sh -c "  npx prisma generate &&  pnpm run build &&  pnpm run start:prod"
+    command: sh -c "  npx prisma generate &&  npx prisma migrate deploy &&  pnpm run build &&  pnpm run start:prod"
 
 volumes:
   wratel-backup:
