@@ -5,21 +5,14 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AdminModule } from '../admin/admin.module';
 import { StudentsModule } from '../students/students.module';
 import { She5Module } from '../she5/she5.module';
-import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      useFactory: (config: ConfigService) => {
-        return {
-          global: true,
-          secret: config.getOrThrow('JWT_SECRET'),
-          verifyOptions: {
-            ignoreExpiration: true,
-          },
-        };
+    JwtModule.register({
+      global: true,
+      verifyOptions: {
+        ignoreExpiration: true,
       },
-      inject: [ConfigService],
     }),
     AdminModule,
     StudentsModule,

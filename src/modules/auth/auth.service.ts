@@ -8,6 +8,7 @@ import { She5LoginDto, She5RigsterDto } from './dto/she5.auth.dto';
 import { seedAdmin } from './util/seed.utl';
 import { studentLoginDto, studentRigsterDto } from './dto/student-register.dto';
 import { Role } from 'src/shared/types/user.types';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -16,6 +17,7 @@ export class AuthService implements OnModuleInit {
     private she5Service: She5Service,
     private studentService: StudentsService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async onModuleInit() {
@@ -27,7 +29,12 @@ export class AuthService implements OnModuleInit {
   }
   async generateAcessToken(userId: number, userType: Role) {
     const payload = { sub: userId, userType };
-    const token = await this.jwtService.signAsync(payload);
+
+    const secret = this.configService.getOrThrow('JWT_SECRET');
+
+    const token = await this.jwtService.signAsync(payload, {
+      secret,
+    });
     return token;
   }
 
