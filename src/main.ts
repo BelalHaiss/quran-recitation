@@ -13,6 +13,7 @@ async function bootstrap() {
       // disableErrorMessages: true,
     }),
   );
+
   app.useGlobalFilters(new globalExceptionFilter());
   app.setGlobalPrefix('/v1/api');
   await app.listen(5000);

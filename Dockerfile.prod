@@ -1,0 +1,22 @@
+FROM node:18-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+
+
+# Copy the package.json and package-lock.json files to the working directory
+COPY package*.json ./
+COPY pnpm-lock.yaml ./
+
+RUN npm install -g pnpm
+
+
+# Install the dependencies
+RUN pnpm install 
+
+ 
+# Copy the source code to the working directory
+COPY . .
+
+

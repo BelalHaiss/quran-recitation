@@ -1,0 +1,39 @@
+version: '3'
+services:
+  redis:
+    container_name: wratel-redis-prod
+    image: redis
+    ports:
+      - 6397:6379
+    volumes:
+      - wratel-backup:/data
+    restart: always
+
+  mysql:
+    container_name: wratel-mysql-prod
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin_pass
+      MYSQL_DATABASE: quran-app
+    ports:
+      - 3307:3306
+    volumes:
+      - wratel-backup:/var/lib/mysql
+    restart: always
+
+  nestjs:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - 5000:5000
+    depends_on:
+      - redis
+      - mysql
+    restart: always
+    environment:
+      - DATABASE_URL=mysql://root:admin_pass@mysql:3306/quran-app
+    command: sh -c "  npx prisma generate &&  pnpm run build &&  pnpm run start:prod"
+
+volumes:
+  wratel-backup:

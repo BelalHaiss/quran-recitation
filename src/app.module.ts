@@ -13,11 +13,14 @@ import { CacheModuleModule } from './shared/cache-module/cache-module.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [`.env.${process.env.NODE_ENV}`],
+    }),
+    AuthModule,
     StudentsModule,
     She5Module,
     AdminModule,
-    AuthModule,
     CategoryModule,
     QuranLessonModule,
     StorageModule,
