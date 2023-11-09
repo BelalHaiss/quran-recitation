@@ -1,24 +1,8 @@
 import { ManagerRole } from '@prisma/client';
-import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import { IsEnum } from 'class-validator';
+import { UserRegisterDTO } from './user.dto';
 
-export class AdminRigsterDto {
-  @IsString()
-  name: string;
-
-  @IsEmail()
-  email: string;
-
-  @Length(8)
-  password: string;
-
+export class AdminRigsterDto extends UserRegisterDTO {
   @IsEnum(ManagerRole)
   role: ManagerRole;
-}
-
-export class AdminLoginDto {
-  @IsEmail()
-  email: string;
-
-  @Length(8)
-  password: string;
 }

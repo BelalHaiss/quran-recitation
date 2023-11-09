@@ -1,7 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { globalExceptionFilter } from './exceptions/http-exception.filter';
+import {
+  CustomExceptionFilter,
+  GlobalExceptionFilter,
+  PrismaExceptionFilter,
+} from './exceptions/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +18,11 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new globalExceptionFilter());
+  app.useGlobalFilters(
+    new GlobalExceptionFilter(),
+    new PrismaExceptionFilter(),
+    new CustomExceptionFilter(),
+  );
   app.setGlobalPrefix('/v1/api');
   await app.listen(5000);
 }

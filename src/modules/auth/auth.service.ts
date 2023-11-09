@@ -2,13 +2,12 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { AdminService } from '../admin/admin.service';
 import { She5Service } from '../she5/she5.service';
 import { StudentsService } from '../students/students.service';
-import { AdminLoginDto, AdminRigsterDto } from './dto/admin.auth.dto';
+import { AdminRigsterDto } from './dto/admin.auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { She5LoginDto, She5RigsterDto } from './dto/she5.auth.dto';
 import { seedAdmin } from './util/seed.utl';
-import { studentLoginDto, studentRigsterDto } from './dto/student-register.dto';
 import { Role } from 'src/shared/types/user.types';
 import { ConfigService } from '@nestjs/config';
+import { UserLoginDto, UserRegisterDTO } from './dto/user.dto';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -43,32 +42,33 @@ export class AuthService implements OnModuleInit {
     return this.adminService.createAdmin(adminDto);
   }
   // admin login
-  async adminLogin(adminDto: AdminLoginDto) {
-    const manger = await this.adminService.adminPasswordLogin(adminDto);
+  async adminLogin(adminDto: UserLoginDto) {
+    const manager = await this.adminService.adminPasswordLogin(adminDto);
+
     const access_token = await this.generateAcessToken(
-      manger.manger_id,
+      manager.manager_id,
       Role.Manger,
     );
-    return { access_token, manger };
+    return { access_token, manager };
   }
 
   // she5 register
-  async registerShe5(she5Dto: She5RigsterDto) {
+  async registerShe5(she5Dto: UserRegisterDTO) {
     return this.she5Service.createShe5(she5Dto);
   }
   // she5 login
-  async she5Login(she5Dto: She5LoginDto) {
+  async she5Login(she5Dto: UserLoginDto) {
     const she5 = await this.she5Service.she5Login(she5Dto);
     const access_token = await this.generateAcessToken(she5.she5_id, Role.She5);
     return { access_token, she5 };
   }
 
   // student register
-  async registerStudent(studentDto: studentRigsterDto) {
+  async registerStudent(studentDto: UserRegisterDTO) {
     return this.studentService.createStudent(studentDto);
   }
   // student login
-  async studentLogin(studentDto: studentLoginDto) {
+  async studentLogin(studentDto: UserLoginDto) {
     const student = await this.studentService.studentPasswordLogin(studentDto);
     const access_token = await this.generateAcessToken(
       student.student_id,

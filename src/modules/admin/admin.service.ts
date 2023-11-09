@@ -1,41 +1,32 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AdminLoginDto, AdminRigsterDto } from '../auth/dto/admin.auth.dto';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { AdminRigsterDto } from '../auth/dto/admin.auth.dto';
 import * as argon2 from 'argon2';
-import { Manager } from '@prisma/client';
-import { PrismaService } from 'src/shared/prisma.service';
+import { UserLoginDto } from '../auth/dto/user.dto';
+import { AdminRepository } from './admin.repo.service';
+import { AdminResDTO } from './dto/AdminRes.DTO';
+import { CustomException } from 'src/exceptions/CustomException';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly adminRepoistory: AdminRepository) {}
 
   async createAdmin(adminData: AdminRigsterDto) {
-    const hash = await argon2.hash(adminData.password);
-    adminData.password = hash;
-    await this.prismaService.manager.create({
-      data: { ...adminData, created_at: new Date() },
-    });
+    return this.adminRepoistory.createAdmin(adminData);
   }
 
-  async adminPasswordLogin(adminLogin: AdminLoginDto) {
-    const manager = await this.prismaService.manager.findUniqueOrThrow({
-      where: {
-        email: adminLogin.email,
-      },
-    });
+  async adminPasswordLogin(adminLogin: UserLoginDto) {
+    const manager = await this.adminRepoistory.adminPasswordLogin(adminLogin);
     const isPasswordMatch = await argon2.verify(
       manager.password,
       adminLogin.password,
     );
     if (!isPasswordMatch)
-      throw new HttpException('password incorrect', HttpStatus.UNAUTHORIZED);
-    const managerEntity: Omit<
-      Manager,
-      'password' | 'created_at' | 'updated_at'
-    > = this.prismaService.excludeFields<Manager>(manager, [
-      'password',
-      'created_at',
-      'updated_at',
-    ]);
-    return managerEntity;
+      throw new CustomException({
+        errorType: 'invalid credintals ',
+        message: 'password incorrect',
+        status: HttpStatus.UNAUTHORIZED,
+      });
+
+    return new AdminResDTO(manager);
   }
 }

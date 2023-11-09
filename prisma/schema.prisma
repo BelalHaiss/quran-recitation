@@ -10,82 +10,90 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 // different users tables
 
 enum ManagerRole {
   ADMIN
   MODERATOR
-  }
+}
 
+enum Gender {
+  MALE
+  FEMALE
+}
 
-model Manager  {
-  manger_id Int   @id @default(autoincrement()) 
-  name String 
-  
-  email String  @unique()
-  password String
-  role ManagerRole @default(ADMIN)
+enum UserType {
+  ADMIN
+  SHE5
+  STUDENT
+}
+
+model User {
+  user_id    Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique()
+  password   String
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt @default(now()) 
+  updated_at DateTime @default(now()) @updatedAt
+  gender     Gender
+  bithday    DateTime @db.Date()
+  user_type  UserType
+
+  manager Manager?
+  student Student?
+  she5    She5?
+
+  @@map("users")
+}
+
+model Manager {
+  manager_id Int @id @default(autoincrement())
+
+  user_id Int         @unique
+  user    User        @relation(fields: [user_id], references: [user_id])
+  role    ManagerRole @default(ADMIN)
+
   @@map("manager")
 }
 
-
-model Student  {
-  student_id Int   @id @default(autoincrement()) 
-  name String 
-  
-  email String @unique()
-  password String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt @default(now()) 
-  auth_provide AuthenticationProvider?
+model Student {
+  student_id    Int                     @id @default(autoincrement())
+  user_id       Int                     @unique
+  user          User                    @relation(fields: [user_id], references: [user_id])
+  auth_provide  AuthenticationProvider?
   quran_lessons StudentLesson[]
-  message Message[]
+  message       Message[]
+
   @@map("student")
 }
 
-
-model She5  {
-  she5_id Int   @id @default(autoincrement()) 
-  name String 
-  
-  email String @unique()
-  password String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt @default(now()) 
-
+model She5 {
+  she5_id       Int             @id @default(autoincrement())
+  user_id       Int             @unique
+  user          User            @relation(fields: [user_id], references: [user_id])
   quran_lessons StudentLesson[]
-  message Message[]
+  message       Message[]
+
   @@map("she5")
 }
-
- 
 
 enum ProviderType {
   FB
   GOOGLE
 }
 
-model  AuthenticationProvider{
-  provider_key  String 
-  provider_type  ProviderType
-  user_id Int  @unique
-  user Student @relation(fields: [user_id],references: [student_id])
-  created_at DateTime @default(now())
-  @@id([provider_key,provider_type])
-  
-    @@map("auth_provider")
+model AuthenticationProvider {
+  provider_key  String
+  provider_type ProviderType
+  user_id       Int          @unique
+  user          Student      @relation(fields: [user_id], references: [student_id])
+  created_at    DateTime     @default(now())
 
-  }
+  @@id([provider_key, provider_type])
+  @@map("auth_provider")
+}
 
-
-
-// lesson and category
-
-  enum ParentCategory {
+enum ParentCategory {
   QURAN
   HADITH
 }
@@ -96,89 +104,89 @@ enum CategoryType {
   SURAH
 }
 
-model Category{
-  category_id Int @id @default(autoincrement())
-  parent_category  ParentCategory
-  category_type CategoryType 
-  label String
-  created_at DateTime @default(now()) 
-  quranLesson QuranLesson[]
-  updated_at DateTime @updatedAt @default(now())  
- @@map("category")
+model Category {
+  category_id     Int            @id @default(autoincrement())
+  parent_category ParentCategory
+  category_type   CategoryType
+  label           String
+  created_at      DateTime       @default(now())
+  quranLesson     QuranLesson[]
+  updated_at      DateTime       @default(now()) @updatedAt
+
+  @@map("category")
 }
 
-
-model QuranLesson{
-  lesson_id Int @id @default(autoincrement()) 
+model QuranLesson {
+  lesson_id   Int      @id @default(autoincrement())
   category_id Int
-  category Category @relation(fields: [category_id] , references: [category_id]) 
-  surah_id Int @db.UnsignedTinyInt 
-  ayah_from Int @db.SmallInt
-  ayah_to Int @db.SmallInt
-  video_url String 
-  audio_url String
-  pdf_url  String
-  description String @db.VarChar(500)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt @default(now()) 
-  
+  category    Category @relation(fields: [category_id], references: [category_id])
+  surah_id    Int      @db.UnsignedTinyInt
+  ayah_from   Int      @db.SmallInt
+  ayah_to     Int      @db.SmallInt
+  video_url   String
+  audio_url   String
+  pdf_url     String
+  description String   @db.VarChar(500)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
   student_lessons StudentLesson[]
+
   @@map("quran_lesson")
 }
 
-
-model StudentLesson{
-  student_lesson_id Int @id @default(autoincrement())
-  quran_lesson_id Int 
-  quran_lesson QuranLesson  @relation(fields: [quran_lesson_id],references: [lesson_id])
-  she5_id Int 
-  she5 She5 @relation(fields: [she5_id],references: [she5_id])
-  student_id Int 
-  student Student @relation(fields: [student_id],references: [student_id])
-  created_at DateTime @default(now())
-  endAt DateTime? 
+model StudentLesson {
+  student_lesson_id Int         @id @default(autoincrement())
+  quran_lesson_id   Int
+  quran_lesson      QuranLesson @relation(fields: [quran_lesson_id], references: [lesson_id])
+  she5_id           Int
+  she5              She5        @relation(fields: [she5_id], references: [she5_id])
+  student_id        Int
+  student           Student     @relation(fields: [student_id], references: [student_id])
+  created_at        DateTime    @default(now())
+  endAt             DateTime?
 
   message Message[]
+
   @@map("student_lesson")
-
 }
-
 
 //  message tables
 
 enum SenderType {
-  SHE5 
+  SHE5
   STUDENT
 }
+
 model Message {
-  message_id Int  @id @default(autoincrement())
-  sutdent_lesson_id Int 
-  student_lesson StudentLesson @relation(fields: [sutdent_lesson_id],references: [student_lesson_id])
-  she5_id Int //[fk]
-  she5 She5 @relation(fields: [she5_id],references: [she5_id])
-  student_id Int // [fk]
-  student Student @relation(fields: [student_id],references: [student_id])
-  msg String? @db.VarChar(500) 
-  created_at DateTime @default(now())
-  updated_at DateTime  @updatedAt @default(now()) 
-  isDeleted Boolean
-  sender_type SenderType
-  
+  message_id        Int           @id @default(autoincrement())
+  sutdent_lesson_id Int
+  student_lesson    StudentLesson @relation(fields: [sutdent_lesson_id], references: [student_lesson_id])
+  she5_id           Int //[fk]
+  she5              She5          @relation(fields: [she5_id], references: [she5_id])
+  student_id        Int // [fk]
+  student           Student       @relation(fields: [student_id], references: [student_id])
+  msg               String?       @db.VarChar(500)
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @default(now()) @updatedAt
+  isDeleted         Boolean
+  sender_type       SenderType
+
   assets AssetMessage[]
+
   @@map("message")
-
 }
-
 
 enum AssetType {
   VOICE
 }
-model AssetMessage{
-  asset_id Int @id @default(autoincrement())
-  message_id Int 
-  message Message @relation(fields: [message_id],references: [message_id])
-  asset_url String  
-  asset_type  AssetType @default(VOICE)
+
+model AssetMessage {
+  asset_id   Int       @id @default(autoincrement())
+  message_id Int
+  message    Message   @relation(fields: [message_id], references: [message_id])
+  asset_url  String
+  asset_type AssetType @default(VOICE)
+
   @@map("assets_message")
 }
-

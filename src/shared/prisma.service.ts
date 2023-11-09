@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
+import { UserConcated } from './types/user.types';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
@@ -8,5 +9,9 @@ export class PrismaService extends PrismaClient {
     return Object.fromEntries(
       Object.entries(obj).filter(([key]) => !keys.includes(key as K)),
     );
+  }
+
+  concatUser<T>(user: User & T): UserConcated<T> {
+    return user;
   }
 }
