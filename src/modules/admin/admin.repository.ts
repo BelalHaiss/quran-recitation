@@ -1,9 +1,8 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AdminRigsterDto } from '../auth/dto/admin.auth.dto';
 import * as argon2 from 'argon2';
 import { Manager, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/shared/prisma.service';
-import { CustomException } from 'src/exceptions/CustomException';
 import { UserConcated } from 'src/shared/types/user.types';
 import { UserLoginDto } from '../auth/dto/user.dto';
 

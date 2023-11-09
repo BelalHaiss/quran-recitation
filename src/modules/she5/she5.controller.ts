@@ -8,8 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { She5Service } from './she5.service';
-import { CreateShe5Dto } from './dto/create-she5.dto';
-import { UpdateShe5Dto } from './dto/update-she5.dto';
 
 @Controller('she5')
 export class She5Controller {

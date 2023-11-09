@@ -1,52 +1,31 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { She5RigsterDto, She5LoginDto } from '../auth/dto/she5.auth.dto';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import * as argon2 from 'argon2';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { She5 } from '@prisma/client';
-import { PrismaService } from 'src/shared/prisma.service';
+import { She5Repository } from './She5.repository';
+import { UserLoginDto, UserRegisterDTO } from '../auth/dto/user.dto';
+import { CustomException } from 'src/exceptions/CustomException';
+import { She5ResDTO } from './dto/create-she5.dto';
 
 @Injectable()
 export class She5Service {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly she5Repoistory: She5Repository) {}
 
-  async createShe5(she5Dto: She5RigsterDto) {
-    try {
-      const hash = await argon2.hash(she5Dto.password);
-      she5Dto.password = hash;
-      await this.prismaService.she5.create({
-        data: { ...she5Dto, created_at: new Date() },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002')
-          throw new HttpException(
-            `this ${error.meta!.target} alread exists`,
-            HttpStatus.CONFLICT,
-          );
-        throw error;
-      }
-      throw error;
-    }
+  async createShe5(she5Dto: UserRegisterDTO) {
+    return this.she5Repoistory.createShe5(she5Dto);
   }
 
-  async she5Login(she5Dto: She5LoginDto) {
-    const she5 = await this.prismaService.she5.findUniqueOrThrow({
-      where: {
-        email: she5Dto.email,
-      },
-    });
+  async she5Login(she5Dto: UserLoginDto) {
+    const she5 = await this.she5Repoistory.she5PasswordLogin(she5Dto);
     const isPasswordMatch = await argon2.verify(
       she5.password,
       she5Dto.password,
     );
     if (!isPasswordMatch)
-      throw new HttpException('password incorrect', HttpStatus.UNAUTHORIZED);
-    const she5Entity: Omit<She5, 'password' | 'created_at' | 'updated_at'> =
-      this.prismaService.excludeFields<She5>(she5, [
-        'password',
-        'created_at',
-        'updated_at',
-      ]);
-    return she5Entity;
+      throw new CustomException({
+        errorType: 'invalid credintals ',
+        message: 'password incorrect',
+        status: HttpStatus.UNAUTHORIZED,
+      });
+
+    return new She5ResDTO(she5);
   }
 }

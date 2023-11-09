@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import {
   CustomExceptionFilter,
+  CustomHttpExceptionFilter,
   GlobalExceptionFilter,
   PrismaExceptionFilter,
 } from './exceptions/http-exception.filter';
@@ -22,6 +23,7 @@ async function bootstrap() {
     new GlobalExceptionFilter(),
     new PrismaExceptionFilter(),
     new CustomExceptionFilter(),
+    new CustomHttpExceptionFilter(),
   );
   app.setGlobalPrefix('/v1/api');
   await app.listen(5000);

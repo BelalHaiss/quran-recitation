@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { AdminRigsterDto } from '../auth/dto/admin.auth.dto';
 import * as argon2 from 'argon2';
 import { UserLoginDto } from '../auth/dto/user.dto';
-import { AdminRepository } from './admin.repo.service';
+import { AdminRepository } from './admin.repository';
 import { AdminResDTO } from './dto/AdminRes.DTO';
 import { CustomException } from 'src/exceptions/CustomException';
 

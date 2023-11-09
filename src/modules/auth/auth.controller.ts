@@ -1,11 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AdminLoginDto, AdminRigsterDto } from './dto/admin.auth.dto';
-import { She5LoginDto, She5RigsterDto } from './dto/she5.auth.dto';
-import { studentLoginDto, studentRigsterDto } from './dto/student-register.dto';
+import { AdminRigsterDto } from './dto/admin.auth.dto';
 import { Role } from 'src/shared/types/user.types';
 import { Roles } from 'src/guards/decorator/role.decorator';
 import { Public } from 'src/guards/decorator/public.decorator';
+import { UserLoginDto, UserRegisterDTO } from './dto/user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -19,31 +18,31 @@ export class AuthController {
 
   @Public()
   @Post('admin/login')
-  adminLogin(@Body() adminData: AdminLoginDto) {
+  adminLogin(@Body() adminData: UserLoginDto) {
     return this.authService.adminLogin(adminData);
   }
 
   @Roles([Role.Manger])
   @Post('she5/register')
-  she5Register(@Body() she5: She5RigsterDto) {
+  she5Register(@Body() she5: UserRegisterDTO) {
     return this.authService.registerShe5(she5);
   }
 
   @Public()
   @Post('she5/login')
-  she5Login(@Body() she5: She5LoginDto) {
+  she5Login(@Body() she5: UserLoginDto) {
     return this.authService.she5Login(she5);
   }
 
   @Public()
   @Post('student/register')
-  studentRegister(@Body() student: studentRigsterDto) {
+  studentRegister(@Body() student: UserRegisterDTO) {
     return this.authService.registerStudent(student);
   }
 
   @Public()
   @Post('student/login')
-  studentLogin(@Body() student: studentLoginDto) {
+  studentLogin(@Body() student: UserLoginDto) {
     return this.authService.studentLogin(student);
   }
 }

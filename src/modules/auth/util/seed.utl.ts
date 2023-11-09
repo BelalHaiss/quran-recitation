@@ -6,4 +6,6 @@ export const seedAdmin: AdminRigsterDto = {
   name: 'admin',
   password: 'admin-admin',
   role: ManagerRole.ADMIN,
+  bithday: new Date('2023-7-12'),
+  gender: 'MALE',
 };
