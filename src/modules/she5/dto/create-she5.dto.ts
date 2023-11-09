@@ -13,6 +13,8 @@ export class She5ResDTO implements She5User {
   she5_id: number = undefined;
   name: string = undefined;
   birthday: Date = undefined;
+  phone: string = undefined;
+
   constructor(she5Data: She5ResDTO) {
     const keys = Object.keys(this);
     keys.forEach((key) => {

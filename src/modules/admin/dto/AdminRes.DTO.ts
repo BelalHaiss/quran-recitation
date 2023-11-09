@@ -14,6 +14,7 @@ export class AdminResDTO implements MangerUser {
   role: ManagerRole = undefined;
   name: string = undefined;
   birthday: Date = undefined;
+  phone: string = undefined;
 
   constructor(adminData: MangerUser) {
     const keys = Object.keys(this);

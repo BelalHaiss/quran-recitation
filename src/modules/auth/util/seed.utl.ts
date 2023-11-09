@@ -8,4 +8,5 @@ export const seedAdmin: AdminRigsterDto = {
   role: ManagerRole.ADMIN,
   birthday: new Date('2023-7-12'),
   gender: 'MALE',
+  phone: '2012312312',
 };

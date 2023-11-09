@@ -4,6 +4,7 @@ import {
   IsDate,
   IsEmail,
   IsEnum,
+  IsNumberString,
   IsString,
   Length,
   MaxDate,
@@ -22,6 +23,9 @@ export class UserRegisterDTO implements Partial<User> {
   @MinDate(new Date('1930'))
   @MaxDate(new Date('2020'))
   birthday: Date;
+
+  @IsNumberString()
+  phone: string;
 
   @IsEnum(Gender)
   gender: Gender;

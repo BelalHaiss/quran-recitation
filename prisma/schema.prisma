@@ -38,12 +38,13 @@ model User {
   gender     Gender
   birthday   DateTime @db.Date()
   user_type  UserType
+  phone      String
 
   manager Manager?
   student Student?
   she5    She5?
 
-  @@map("users")
+  @@map("user")
 }
 
 model Manager {

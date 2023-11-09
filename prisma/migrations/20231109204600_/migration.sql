@@ -1,40 +1,45 @@
 -- CreateTable
-CREATE TABLE `manager` (
-    `manger_id` INTEGER NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+    `user_id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
-    `role` ENUM('ADMIN', 'MODERATOR') NOT NULL DEFAULT 'ADMIN',
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `gender` ENUM('MALE', 'FEMALE') NOT NULL,
+    `birthday` DATE NOT NULL,
+    `user_type` ENUM('ADMIN', 'SHE5', 'STUDENT') NOT NULL,
+    `phone` INTEGER NOT NULL,
 
-    UNIQUE INDEX `manager_email_key`(`email`),
-    PRIMARY KEY (`manger_id`)
+    UNIQUE INDEX `user_email_key`(`email`),
+    PRIMARY KEY (`user_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `manager` (
+    `manager_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `role` ENUM('ADMIN', 'MODERATOR') NOT NULL DEFAULT 'ADMIN',
+
+    UNIQUE INDEX `manager_user_id_key`(`user_id`),
+    PRIMARY KEY (`manager_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `student` (
     `student_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
-    `email` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `user_id` INTEGER NOT NULL,
 
-    UNIQUE INDEX `student_email_key`(`email`),
+    UNIQUE INDEX `student_user_id_key`(`user_id`),
     PRIMARY KEY (`student_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `she5` (
     `she5_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
-    `email` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `user_id` INTEGER NOT NULL,
 
-    UNIQUE INDEX `she5_email_key`(`email`),
+    UNIQUE INDEX `she5_user_id_key`(`user_id`),
     PRIMARY KEY (`she5_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -56,7 +61,6 @@ CREATE TABLE `category` (
     `category_type` ENUM('MEMORIZING', 'TAJWID', 'SURAH') NOT NULL,
     `label` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `image` VARCHAR(191) NULL,
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`category_id`)
@@ -115,6 +119,15 @@ CREATE TABLE `assets_message` (
 
     PRIMARY KEY (`asset_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `manager` ADD CONSTRAINT `manager_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `student` ADD CONSTRAINT `student_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `she5` ADD CONSTRAINT `she5_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `auth_provider` ADD CONSTRAINT `auth_provider_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `student`(`student_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
