@@ -13,15 +13,16 @@ export class AdminRepository {
   async createAdmin(adminData: AdminRigsterDto) {
     const hash = await argon2.hash(adminData.password);
     adminData.password = hash;
-
+    const managerData: Partial<Manager> = {
+      role: adminData.role,
+    };
+    delete adminData.role;
     await this.prismaService.user.create({
       data: {
         ...adminData,
         user_type: 'ADMIN',
         manager: {
-          create: {
-            role: adminData.role,
-          },
+          create: managerData,
         },
       },
     });

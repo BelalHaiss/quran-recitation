@@ -26,7 +26,6 @@ export class AdminService {
         message: 'password incorrect',
         status: HttpStatus.UNAUTHORIZED,
       });
-
-    return new AdminResDTO(manager);
+    return manager;
   }
 }

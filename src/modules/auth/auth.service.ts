@@ -8,6 +8,7 @@ import { seedAdmin } from './util/seed.utl';
 import { Role } from 'src/shared/types/user.types';
 import { ConfigService } from '@nestjs/config';
 import { UserLoginDto, UserRegisterDTO } from './dto/user.dto';
+import { AdminResDTO } from '../admin/dto/AdminRes.DTO';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -46,10 +47,10 @@ export class AuthService implements OnModuleInit {
     const manager = await this.adminService.adminPasswordLogin(adminDto);
 
     const access_token = await this.generateAcessToken(
-      manager.manager_id,
+      manager.manager_id as number,
       Role.Manger,
     );
-    return { access_token, manager };
+    return { user: new AdminResDTO(manager), access_token };
   }
 
   // she5 register

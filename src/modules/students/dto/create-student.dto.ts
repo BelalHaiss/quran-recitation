@@ -8,15 +8,15 @@ type StudentUser = OmitSameType<
 >;
 
 export class StudentResDTO implements StudentUser {
-  email: string;
-  gender: Gender;
-  student_id: number;
-  name: string;
-  bithday: Date;
+  email: string = undefined;
+  gender: Gender = undefined;
+  student_id: number = undefined;
+  name: string = undefined;
+  birthday: Date = undefined;
   constructor(studentData: StudentResDTO) {
     const keys = Object.keys(this);
-    Object.fromEntries(
-      Object.entries(studentData).filter(([dataKey]) => keys.includes(dataKey)),
-    );
+    keys.forEach((key) => {
+      this[key] = studentData[key];
+    });
   }
 }

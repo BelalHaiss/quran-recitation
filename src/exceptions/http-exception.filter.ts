@@ -29,7 +29,7 @@ export class CustomHttpExceptionFilter implements ExceptionFilter {
 export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: CustomException, host: ArgumentsHost) {
     const response: Response = host.switchToHttp().getResponse();
-    response.status(exception.statusCode).json(exception);
+    response.status(exception.statusCode).json(exception.getResponse());
   }
 }
 
@@ -41,11 +41,12 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     const message = target // when unique constrain happend
       ? `This ${target} already exists`
       : exception.name;
-    const resBody: ErrorObject = new CustomException({
+    const resBody = new CustomException({
       message,
       status: HttpStatus.CONFLICT,
     });
-    response.status(resBody.statusCode).json({ resBody });
+
+    response.status(resBody.statusCode).json(resBody.getResponse());
   }
 }
 

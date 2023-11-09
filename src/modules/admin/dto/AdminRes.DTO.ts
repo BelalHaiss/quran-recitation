@@ -8,16 +8,17 @@ type MangerUser = OmitSameType<
 >;
 
 export class AdminResDTO implements MangerUser {
-  email: string;
-  gender: $Enums.Gender;
-  manager_id: number;
-  role: ManagerRole;
-  name: string;
-  bithday: Date;
+  email: string = undefined;
+  gender: $Enums.Gender = undefined;
+  manager_id: number = undefined;
+  role: ManagerRole = undefined;
+  name: string = undefined;
+  birthday: Date = undefined;
+
   constructor(adminData: MangerUser) {
     const keys = Object.keys(this);
-    Object.fromEntries(
-      Object.entries(adminData).filter(([dataKey]) => keys.includes(dataKey)),
-    );
+    keys.forEach((key) => {
+      this[key] = adminData[key];
+    });
   }
 }

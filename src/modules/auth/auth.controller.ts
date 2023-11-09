@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AdminRigsterDto } from './dto/admin.auth.dto';
 import { Role } from 'src/shared/types/user.types';
@@ -18,8 +18,9 @@ export class AuthController {
 
   @Public()
   @Post('admin/login')
-  adminLogin(@Body() adminData: UserLoginDto) {
-    return this.authService.adminLogin(adminData);
+  @HttpCode(200)
+  async adminLogin(@Body() adminData: UserLoginDto) {
+    return await this.authService.adminLogin(adminData);
   }
 
   @Roles([Role.Manger])
@@ -30,6 +31,7 @@ export class AuthController {
 
   @Public()
   @Post('she5/login')
+  @HttpCode(200)
   she5Login(@Body() she5: UserLoginDto) {
     return this.authService.she5Login(she5);
   }
@@ -42,6 +44,7 @@ export class AuthController {
 
   @Public()
   @Post('student/login')
+  @HttpCode(200)
   studentLogin(@Body() student: UserLoginDto) {
     return this.authService.studentLogin(student);
   }

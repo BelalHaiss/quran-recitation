@@ -36,7 +36,7 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
   gender     Gender
-  bithday    DateTime @db.Date()
+  birthday   DateTime @db.Date()
   user_type  UserType
 
   manager Manager?

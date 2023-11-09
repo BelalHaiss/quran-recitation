@@ -15,5 +15,7 @@ export class CustomException extends HttpException implements ErrorObject {
       message: errorBody.message,
     };
     super(resBody, resBody.statusCode);
+
+    Object.assign(this, resBody);
   }
 }

@@ -1,6 +1,14 @@
 import { Gender, User } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsDate, IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import {
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsString,
+  Length,
+  MaxDate,
+  MinDate,
+} from 'class-validator';
 
 export class UserRegisterDTO implements Partial<User> {
   @IsString()
@@ -11,7 +19,9 @@ export class UserRegisterDTO implements Partial<User> {
 
   @Type(() => Date)
   @IsDate()
-  bithday: Date;
+  @MinDate(new Date('1930'))
+  @MaxDate(new Date('2020'))
+  birthday: Date;
 
   @IsEnum(Gender)
   gender: Gender;

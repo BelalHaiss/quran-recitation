@@ -8,15 +8,15 @@ type She5User = OmitSameType<
 >;
 
 export class She5ResDTO implements She5User {
-  email: string;
-  gender: Gender;
-  she5_id: number;
-  name: string;
-  bithday: Date;
+  email: string = undefined;
+  gender: Gender = undefined;
+  she5_id: number = undefined;
+  name: string = undefined;
+  birthday: Date = undefined;
   constructor(she5Data: She5ResDTO) {
     const keys = Object.keys(this);
-    Object.fromEntries(
-      Object.entries(she5Data).filter(([dataKey]) => keys.includes(dataKey)),
-    );
+    keys.forEach((key) => {
+      this[key] = she5Data[key];
+    });
   }
 }

@@ -21,9 +21,9 @@ async function bootstrap() {
 
   app.useGlobalFilters(
     new GlobalExceptionFilter(),
+    new CustomHttpExceptionFilter(),
     new PrismaExceptionFilter(),
     new CustomExceptionFilter(),
-    new CustomHttpExceptionFilter(),
   );
   app.setGlobalPrefix('/v1/api');
   await app.listen(5000);
