@@ -800,3 +800,10 @@ export const surahs_info_seed = (): Surah_Info[] => [
     versesCount: 6,
   },
 ];
+
+// const juza = [
+//   {
+//     // name obj
+//     // surah arr
+//   },
+// ];

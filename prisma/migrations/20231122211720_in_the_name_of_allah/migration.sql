@@ -9,7 +9,7 @@ CREATE TABLE `user` (
     `gender` ENUM('MALE', 'FEMALE') NOT NULL,
     `birthday` DATE NOT NULL,
     `user_type` ENUM('ADMIN', 'SHE5', 'STUDENT') NOT NULL,
-    `phone` INTEGER NOT NULL,
+    `phone` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `user_email_key`(`email`),
     PRIMARY KEY (`user_id`)
@@ -46,7 +46,7 @@ CREATE TABLE `she5` (
 -- CreateTable
 CREATE TABLE `auth_provider` (
     `provider_key` VARCHAR(191) NOT NULL,
-    `provider_type` ENUM('FB', 'GOOGLE') NOT NULL,
+    `provider_type` ENUM('FACEBOOK', 'GOOGLE', 'APPLE') NOT NULL,
     `user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -58,7 +58,7 @@ CREATE TABLE `auth_provider` (
 CREATE TABLE `category` (
     `category_id` INTEGER NOT NULL AUTO_INCREMENT,
     `parent_category` ENUM('QURAN', 'HADITH') NOT NULL,
-    `category_type` ENUM('MEMORIZING', 'TAJWID', 'SURAH') NOT NULL,
+    `category_type` ENUM('MEMORIZING', 'TAJWID', 'SIRAH', 'FIQH') NOT NULL,
     `label` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -67,12 +67,27 @@ CREATE TABLE `category` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Lesson` (
+    `lesson_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `label` VARCHAR(191) NOT NULL,
+    `video_url` VARCHAR(191) NOT NULL,
+    `audio_url` VARCHAR(191) NOT NULL,
+    `pdf_url` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(500) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `category_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`lesson_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `quran_lesson` (
     `lesson_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `category_id` INTEGER NOT NULL,
     `surah_id` TINYINT UNSIGNED NOT NULL,
-    `ayah_from` SMALLINT NOT NULL,
-    `ayah_to` SMALLINT NOT NULL,
+    `juz_id` TINYINT UNSIGNED NOT NULL,
+    `ayah_from` SMALLINT UNSIGNED NOT NULL,
+    `ayah_to` SMALLINT UNSIGNED NOT NULL,
     `video_url` VARCHAR(191) NOT NULL,
     `audio_url` VARCHAR(191) NOT NULL,
     `pdf_url` VARCHAR(191) NOT NULL,
@@ -86,11 +101,13 @@ CREATE TABLE `quran_lesson` (
 -- CreateTable
 CREATE TABLE `student_lesson` (
     `student_lesson_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `quran_lesson_id` INTEGER NOT NULL,
     `she5_id` INTEGER NOT NULL,
     `student_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `endAt` DATETIME(3) NULL,
+    `lesson_type` ENUM('MEMORIZING', 'TAJWID', 'SIRAH', 'FIQH') NOT NULL,
+    `quran_lesson_id` INTEGER NULL,
+    `lesson_id` INTEGER NULL,
 
     PRIMARY KEY (`student_lesson_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -133,16 +150,19 @@ ALTER TABLE `she5` ADD CONSTRAINT `she5_user_id_fkey` FOREIGN KEY (`user_id`) RE
 ALTER TABLE `auth_provider` ADD CONSTRAINT `auth_provider_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `student`(`student_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `quran_lesson` ADD CONSTRAINT `quran_lesson_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `category`(`category_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `student_lesson` ADD CONSTRAINT `student_lesson_quran_lesson_id_fkey` FOREIGN KEY (`quran_lesson_id`) REFERENCES `quran_lesson`(`lesson_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Lesson` ADD CONSTRAINT `Lesson_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `category`(`category_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `student_lesson` ADD CONSTRAINT `student_lesson_she5_id_fkey` FOREIGN KEY (`she5_id`) REFERENCES `she5`(`she5_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `student_lesson` ADD CONSTRAINT `student_lesson_student_id_fkey` FOREIGN KEY (`student_id`) REFERENCES `student`(`student_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `student_lesson` ADD CONSTRAINT `student_lesson_quran_lesson_id_fkey` FOREIGN KEY (`quran_lesson_id`) REFERENCES `quran_lesson`(`lesson_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `student_lesson` ADD CONSTRAINT `student_lesson_lesson_id_fkey` FOREIGN KEY (`lesson_id`) REFERENCES `Lesson`(`lesson_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `message` ADD CONSTRAINT `message_sutdent_lesson_id_fkey` FOREIGN KEY (`sutdent_lesson_id`) REFERENCES `student_lesson`(`student_lesson_id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -79,8 +79,9 @@ model She5 {
 }
 
 enum ProviderType {
-  FB
+  FACEBOOK
   GOOGLE
+  APPLE
 }
 
 model AuthenticationProvider {
@@ -102,7 +103,8 @@ enum ParentCategory {
 enum CategoryType {
   MEMORIZING
   TAJWID
-  SURAH
+  SIRAH
+  FIQH
 }
 
 model Category {
@@ -111,19 +113,34 @@ model Category {
   category_type   CategoryType
   label           String
   created_at      DateTime       @default(now())
-  quranLesson     QuranLesson[]
   updated_at      DateTime       @default(now()) @updatedAt
+
+  lessons Lesson[]
 
   @@map("category")
 }
 
+model Lesson {
+  lesson_id   Int      @id @default(autoincrement())
+  label       String
+  video_url   String
+  audio_url   String
+  pdf_url     String
+  description String   @db.VarChar(500)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  category_id     Int
+  Category        Category        @relation(fields: [category_id], references: [category_id])
+  student_lessons StudentLesson[]
+}
+
 model QuranLesson {
   lesson_id   Int      @id @default(autoincrement())
-  category_id Int
-  category    Category @relation(fields: [category_id], references: [category_id])
   surah_id    Int      @db.UnsignedTinyInt
-  ayah_from   Int      @db.SmallInt
-  ayah_to     Int      @db.SmallInt
+  juz_id      Int      @db.UnsignedTinyInt
+  ayah_from   Int      @db.UnsignedSmallInt
+  ayah_to     Int      @db.UnsignedSmallInt
   video_url   String
   audio_url   String
   pdf_url     String
@@ -137,15 +154,19 @@ model QuranLesson {
 }
 
 model StudentLesson {
-  student_lesson_id Int         @id @default(autoincrement())
-  quran_lesson_id   Int
-  quran_lesson      QuranLesson @relation(fields: [quran_lesson_id], references: [lesson_id])
+  student_lesson_id Int       @id @default(autoincrement())
   she5_id           Int
-  she5              She5        @relation(fields: [she5_id], references: [she5_id])
+  she5              She5      @relation(fields: [she5_id], references: [she5_id])
   student_id        Int
-  student           Student     @relation(fields: [student_id], references: [student_id])
-  created_at        DateTime    @default(now())
+  student           Student   @relation(fields: [student_id], references: [student_id])
+  created_at        DateTime  @default(now())
   endAt             DateTime?
+
+  lesson_type     CategoryType
+  quran_lesson_id Int?
+  quran_lesson    QuranLesson? @relation(fields: [quran_lesson_id], references: [lesson_id])
+  lesson_id       Int?
+  lesson          Lesson?      @relation(fields: [lesson_id], references: [lesson_id])
 
   message Message[]
 

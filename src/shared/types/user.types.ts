@@ -11,6 +11,4 @@ export enum Role {
   She5 = 'she5',
 }
 
-export type UserConcated<T, K extends keyof T = keyof T> = User & {
-  [key in K]: T[K];
-};
+export type UserConcated<T> = User & T;
