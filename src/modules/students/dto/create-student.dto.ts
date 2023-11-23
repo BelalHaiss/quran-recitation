@@ -14,6 +14,7 @@ export class StudentResDTO implements StudentUser {
   name: string = undefined;
   birthday: Date = undefined;
   phone: string = undefined;
+
   constructor(studentData: StudentResDTO) {
     const keys = Object.keys(this);
     keys.forEach((key) => {

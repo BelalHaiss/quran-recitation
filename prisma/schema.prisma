@@ -60,7 +60,7 @@ model Manager {
 model Student {
   student_id    Int                     @id @default(autoincrement())
   user_id       Int                     @unique
-  memorized     Json
+  memorized     Json?
   user          User                    @relation(fields: [user_id], references: [user_id])
   auth_provide  AuthenticationProvider?
   quran_lessons StudentLesson[]
