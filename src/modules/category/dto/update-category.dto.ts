@@ -15,4 +15,8 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
   @IsOptional()
   @IsEnum(ParentCategory)
   parent_category: ParentCategory;
+
+  @IsOptional()
+  @IsString()
+  image_url: string;
 }

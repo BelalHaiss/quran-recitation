@@ -24,7 +24,6 @@ export class QuranLessonService {
 
     return this.quranRepository.create({
       ...createQuranLessonDto,
-      category_id: 1,
       audio_url,
       pdf_url,
     });
@@ -76,5 +75,11 @@ export class QuranLessonService {
 
   remove(id: number) {
     return this.quranRepository.removeById(id);
+  }
+
+  private getJuzFromSurah(
+    surah: Pick<QuranLesson, 'surah_id' | 'ayah_from' | 'ayah_to'>,
+  ) {
+    const { surah_id, ayah_from, ayah_to } = surah;
   }
 }

@@ -15,7 +15,7 @@ export class QuranRepository {
   //create new one
   async create(
     quranLesson: CreateQuranLessonDto &
-      Pick<QuranLesson, 'audio_url' | 'pdf_url' | 'category_id'>,
+      Pick<QuranLesson, 'audio_url' | 'pdf_url' | 'juz_id'>,
   ) {
     const isValid = await this.validateBeforeCreate(quranLesson);
     if (!isValid)

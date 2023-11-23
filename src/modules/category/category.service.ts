@@ -11,6 +11,7 @@ export class CategoryService implements OnModuleInit {
       label: 'تحفيظ قران',
       category_type: 'MEMORIZING',
       parent_category: 'QURAN',
+      image_url: null,
     };
     this.prisma.category
       .create({

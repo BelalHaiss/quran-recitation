@@ -1,4 +1,4 @@
-import { Surah_Info } from 'src/shared/types/quran';
+import { Juz, Surah_Info } from 'src/shared/types/quran';
 
 export const surahs_info_seed = (): Surah_Info[] => [
   {
@@ -7,6 +7,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Fatihah',
     },
     versesCount: 7,
+    juz: [0],
   },
   {
     name: {
@@ -14,6 +15,19 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Baqarah',
     },
     versesCount: 286,
+    juz: [0, 1, 2],
+    juz_points: [
+      { juz_index: 0, starting: 1, ending: 141 },
+      {
+        juz_index: 1,
+        starting: 142,
+        ending: 252,
+      },
+      {
+        juz_index: 2,
+        starting: 253,
+      },
+    ],
   },
   {
     name: {
@@ -21,6 +35,15 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: "Aali 'Imran",
     },
     versesCount: 200,
+    juz: [2, 3],
+    juz_points: [
+      { juz_index: 2, starting: 1, ending: 92 },
+
+      {
+        juz_index: 3,
+        starting: 93,
+      },
+    ],
   },
   {
     name: {
@@ -28,6 +51,19 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'An-Nisa',
     },
     versesCount: 176,
+    juz: [3, 4, 5],
+    juz_points: [
+      { juz_index: 3, starting: 1, ending: 23 },
+      {
+        juz_index: 4,
+        starting: 24,
+        ending: 147,
+      },
+      {
+        juz_index: 5,
+        starting: 148,
+      },
+    ],
   },
   {
     name: {
@@ -35,6 +71,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: "Al-Ma'idah",
     },
     versesCount: 120,
+    juz: [5, 6],
+    juz_points: [
+      { juz_index: 5, starting: 1, ending: 81 },
+      {
+        juz_index: 6,
+        starting: 82,
+      },
+    ],
   },
   {
     name: {
@@ -42,6 +86,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: "Al-An'am",
     },
     versesCount: 165,
+    juz: [6, 7],
+    juz_points: [
+      { juz_index: 6, starting: 1, ending: 110 },
+      {
+        juz_index: 7,
+        starting: 111,
+      },
+    ],
   },
   {
     name: {
@@ -49,6 +101,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: "Al-A'raf",
     },
     versesCount: 206,
+    juz: [7, 8],
+    juz_points: [
+      { juz_index: 7, starting: 1, ending: 87 },
+      {
+        juz_index: 8,
+        starting: 88,
+      },
+    ],
   },
   {
     name: {
@@ -56,6 +116,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Anfal',
     },
     versesCount: 75,
+    juz: [8, 9],
+    juz_points: [
+      { juz_index: 8, starting: 1, ending: 40 },
+      {
+        juz_index: 9,
+        starting: 41,
+      },
+    ],
   },
   {
     name: {
@@ -63,6 +131,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'At-Tawbah',
     },
     versesCount: 129,
+    juz: [9, 10],
+    juz_points: [
+      { juz_index: 9, starting: 1, ending: 92 },
+      {
+        juz_index: 10,
+        starting: 93,
+      },
+    ],
   },
   {
     name: {
@@ -70,6 +146,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Yunus',
     },
     versesCount: 109,
+    juz: [10],
   },
   {
     name: {
@@ -77,6 +154,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Hud',
     },
     versesCount: 123,
+    juz: [10, 11],
+    juz_points: [
+      { juz_index: 10, starting: 1, ending: 5 },
+      {
+        juz_index: 11,
+        starting: 6,
+      },
+    ],
   },
   {
     name: {
@@ -84,6 +169,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Yusuf',
     },
     versesCount: 111,
+    juz: [11, 12],
+    juz_points: [
+      { juz_index: 11, starting: 1, ending: 52 },
+      {
+        juz_index: 12,
+        starting: 53,
+      },
+    ],
   },
   {
     name: {
@@ -91,6 +184,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: "Ar-Ra'd",
     },
     versesCount: 43,
+    juz: [12],
   },
   {
     name: {
@@ -98,6 +192,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Ibrahim',
     },
     versesCount: 52,
+    juz: [12],
   },
   {
     name: {
@@ -105,6 +200,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Hijr',
     },
     versesCount: 99,
+    juz: [13],
   },
   {
     name: {
@@ -112,6 +208,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'An-Nahl',
     },
     versesCount: 128,
+    juz: [13],
   },
   {
     name: {
@@ -119,6 +216,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Isra',
     },
     versesCount: 111,
+    juz: [14],
   },
   {
     name: {
@@ -126,6 +224,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Kahf',
     },
     versesCount: 110,
+    juz: [14, 15],
+    juz_points: [
+      {
+        juz_index: 14,
+        starting: 1,
+        ending: 74,
+      },
+      {
+        juz_index: 15,
+        starting: 75,
+      },
+    ],
   },
   {
     name: {
@@ -133,6 +243,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Maryam',
     },
     versesCount: 98,
+    juz: [15],
   },
   {
     name: {
@@ -140,6 +251,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Ta-Ha',
     },
     versesCount: 135,
+    juz: [15],
   },
   {
     name: {
@@ -147,6 +259,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Anbiya',
     },
     versesCount: 112,
+    juz: [16],
   },
   {
     name: {
@@ -154,6 +267,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Hajj',
     },
     versesCount: 78,
+    juz: [16],
   },
   {
     name: {
@@ -161,6 +275,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: "Al-Mu'minun",
     },
     versesCount: 118,
+    juz: [17],
   },
   {
     name: {
@@ -168,6 +283,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'An-Nur',
     },
     versesCount: 64,
+    juz: [17],
   },
   {
     name: {
@@ -175,6 +291,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Furqan',
     },
     versesCount: 77,
+    juz: [17, 18],
+    juz_points: [
+      {
+        juz_index: 17,
+        starting: 1,
+        ending: 20,
+      },
+      {
+        juz_index: 18,
+        starting: 21,
+      },
+    ],
   },
   {
     name: {
@@ -182,6 +310,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: "Ash-Shu'ara",
     },
     versesCount: 227,
+    juz: [18],
   },
   {
     name: {
@@ -189,6 +318,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'An-Naml',
     },
     versesCount: 93,
+    juz: [18, 19],
+    juz_points: [
+      {
+        juz_index: 18,
+        starting: 1,
+        ending: 55,
+      },
+      {
+        juz_index: 18,
+        starting: 56,
+      },
+    ],
   },
   {
     name: {
@@ -196,6 +337,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Qasas',
     },
     versesCount: 88,
+    juz: [19],
   },
   {
     name: {
@@ -203,6 +345,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Ankabut',
     },
     versesCount: 69,
+    juz: [19, 20],
+    juz_points: [
+      {
+        juz_index: 19,
+        starting: 1,
+        ending: 45,
+      },
+      {
+        juz_index: 20,
+        starting: 46,
+      },
+    ],
   },
   {
     name: {
@@ -210,6 +364,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Ar-Rum',
     },
     versesCount: 60,
+    juz: [20],
   },
   {
     name: {
@@ -217,6 +372,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Luqmaan',
     },
     versesCount: 34,
+    juz: [20],
   },
   {
     name: {
@@ -224,6 +380,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'As-Sajdah',
     },
     versesCount: 30,
+    juz: [20],
   },
   {
     name: {
@@ -231,6 +388,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Ahzaab',
     },
     versesCount: 73,
+    juz: [20, 21],
+    juz_points: [
+      { juz_index: 20, starting: 1, ending: 30 },
+      {
+        juz_index: 21,
+        starting: 31,
+      },
+    ],
   },
   {
     name: {
@@ -238,6 +403,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Saba',
     },
     versesCount: 54,
+    juz: [21],
   },
   {
     name: {
@@ -245,6 +411,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Faatir',
     },
     versesCount: 45,
+    juz: [21],
   },
   {
     name: {
@@ -252,6 +419,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Ya-Sin',
     },
     versesCount: 83,
+    juz: [21, 22],
+    juz_points: [
+      {
+        juz_index: 21,
+        starting: 1,
+        ending: 27,
+      },
+      {
+        juz_index: 22,
+        starting: 28,
+      },
+    ],
   },
   {
     name: {
@@ -259,6 +438,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'As-Saaffaat',
     },
     versesCount: 182,
+    juz: [22],
   },
   {
     name: {
@@ -266,6 +446,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Saad',
     },
     versesCount: 88,
+    juz: [22],
   },
   {
     name: {
@@ -273,6 +454,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Az-Zumar',
     },
     versesCount: 75,
+    juz: [22, 23],
+    juz_points: [
+      {
+        juz_index: 22,
+        starting: 1,
+        ending: 31,
+      },
+      {
+        juz_index: 23,
+        starting: 32,
+      },
+    ],
   },
   {
     name: {
@@ -280,6 +473,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Ghafir',
     },
     versesCount: 85,
+    juz: [23],
   },
   {
     name: {
@@ -287,6 +481,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Fussilat',
     },
     versesCount: 54,
+    juz: [23, 24],
+    juz_points: [
+      {
+        juz_index: 23,
+        starting: 1,
+        ending: 46,
+      },
+      {
+        juz_index: 24,
+        starting: 47,
+      },
+    ],
   },
   {
     name: {
@@ -294,6 +500,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Ash-Shura',
     },
     versesCount: 53,
+    juz: [24],
   },
   {
     name: {
@@ -301,6 +508,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Az-Zukhruf',
     },
     versesCount: 89,
+    juz: [24],
   },
   {
     name: {
@@ -308,6 +516,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Ad-Dukhaan',
     },
     versesCount: 59,
+    juz: [24],
   },
   {
     name: {
@@ -315,6 +524,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Jaathiyah',
     },
     versesCount: 37,
+    juz: [24],
   },
   {
     name: {
@@ -322,6 +532,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Ahqaaf',
     },
     versesCount: 35,
+    juz: [25],
   },
   {
     name: {
@@ -329,6 +540,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Muhammad',
     },
     versesCount: 38,
+    juz: [25],
   },
   {
     name: {
@@ -336,6 +548,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Fath',
     },
     versesCount: 29,
+    juz: [25],
   },
   {
     name: {
@@ -343,6 +556,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Al-Hujuraat',
     },
     versesCount: 18,
+    juz: [25],
   },
   {
     name: {
@@ -350,6 +564,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Qaaf',
     },
     versesCount: 45,
+    juz: [25],
   },
   {
     name: {
@@ -357,6 +572,18 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'Adh-Dhaariyaat',
     },
     versesCount: 60,
+    juz: [25, 26],
+    juz_points: [
+      {
+        juz_index: 25,
+        starting: 1,
+        ending: 30,
+      },
+      {
+        juz_index: 26,
+        starting: 31,
+      },
+    ],
   },
   {
     name: {
@@ -364,6 +591,7 @@ export const surahs_info_seed = (): Surah_Info[] => [
       en: 'At-Toor',
     },
     versesCount: 49,
+    juz: [26],
   },
   {
     name: {
@@ -801,9 +1029,14 @@ export const surahs_info_seed = (): Surah_Info[] => [
   },
 ];
 
-// const juza = [
-//   {
-//     // name obj
-//     // surah arr
-//   },
-// ];
+const juz_info: Juz[] = [
+  {
+    surahs: [0, 1],
+  },
+  {
+    surahs: [1],
+  },
+  {
+    surahs: [1, 2],
+  },
+];

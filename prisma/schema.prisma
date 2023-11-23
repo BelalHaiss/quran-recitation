@@ -38,7 +38,7 @@ model User {
   gender     Gender
   birthday   DateTime @db.Date()
   user_type  UserType
-  phone      String
+  phone      String?
 
   manager Manager?
   student Student?
@@ -60,6 +60,7 @@ model Manager {
 model Student {
   student_id    Int                     @id @default(autoincrement())
   user_id       Int                     @unique
+  memorized     Json
   user          User                    @relation(fields: [user_id], references: [user_id])
   auth_provide  AuthenticationProvider?
   quran_lessons StudentLesson[]
@@ -114,8 +115,7 @@ model Category {
   label           String
   created_at      DateTime       @default(now())
   updated_at      DateTime       @default(now()) @updatedAt
-
-  lessons Lesson[]
+  image_url       String?
 
   @@map("category")
 }
@@ -124,30 +124,31 @@ model Lesson {
   lesson_id   Int      @id @default(autoincrement())
   label       String
   video_url   String
-  audio_url   String
-  pdf_url     String
+  audio_url   String?
+  pdf_url     String?
   description String   @db.VarChar(500)
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now()) @updatedAt
 
-  category_id     Int
-  Category        Category        @relation(fields: [category_id], references: [category_id])
+  category        CategoryType
   student_lessons StudentLesson[]
+
+  @@map("lesson")
 }
 
 model QuranLesson {
-  lesson_id   Int      @id @default(autoincrement())
-  surah_id    Int      @db.UnsignedTinyInt
-  juz_id      Int      @db.UnsignedTinyInt
-  ayah_from   Int      @db.UnsignedSmallInt
-  ayah_to     Int      @db.UnsignedSmallInt
-  video_url   String
-  audio_url   String
-  pdf_url     String
-  description String   @db.VarChar(500)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @default(now()) @updatedAt
-
+  lesson_id       Int             @id @default(autoincrement())
+  surah_id        Int             @db.UnsignedTinyInt
+  juz_id          Int             @db.UnsignedTinyInt
+  ayah_from       Int             @db.UnsignedSmallInt
+  ayah_to         Int             @db.UnsignedSmallInt
+  video_url       String
+  audio_url       String
+  pdf_url         String
+  description     String          @db.VarChar(500)
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @default(now()) @updatedAt
+  label           String
   student_lessons StudentLesson[]
 
   @@map("quran_lesson")

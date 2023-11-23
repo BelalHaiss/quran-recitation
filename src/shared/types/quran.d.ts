@@ -6,7 +6,13 @@ export type Surah_Info = {
     ar: string;
   };
   versesCount: number;
-  juz: { index: number; starting: number; ending: number };
+  juz_points?: { juz_index: number; starting: number; ending?: number }[];
+  juz: number[];
+};
+
+export type Juz = {
+  end: { surahIndex: number; ayah: number };
+  surahs: number[];
 };
 
 // use for naming convension when saving files to cloud storage

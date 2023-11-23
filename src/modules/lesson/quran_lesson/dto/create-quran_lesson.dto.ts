@@ -8,9 +8,12 @@ export class CreateQuranLessonDto
   implements
     OmitDateFields<
       QuranLesson,
-      'audio_url' | 'lesson_id' | 'pdf_url' | 'category_id'
+      'audio_url' | 'lesson_id' | 'pdf_url' | 'juz_id'
     >
 {
+  @IsString()
+  label: string;
+
   @Type(() => Number)
   @IsInt()
   surah_id: number;
