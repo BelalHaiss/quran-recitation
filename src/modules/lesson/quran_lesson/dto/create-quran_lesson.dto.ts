@@ -45,6 +45,7 @@ export const files_validation = (
   if (!isUpdate && (!audio || !pdf)) {
     throw new BadRequestException('make sure to have pdf + audio files');
   }
+
   Object.keys(files).forEach((key: keyof Quran_Lesson_Files) => {
     validateType(files[key][0], key.toString() as 'pdf' | 'audio');
   });

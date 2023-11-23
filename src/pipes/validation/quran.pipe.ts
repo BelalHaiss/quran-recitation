@@ -8,7 +8,6 @@ import { Surah_Info } from '../../shared/types/quran';
 import { PipeTransform } from '@nestjs/common';
 import { CacheService } from 'src/shared/cache-module/cache-module.service';
 import { QuranLesson } from '@prisma/client';
-import { CacheKeys } from 'src/shared/types/redisKeys.types';
 
 @Injectable()
 export class QuranValidatorPipe implements PipeTransform {
@@ -18,16 +17,14 @@ export class QuranValidatorPipe implements PipeTransform {
     if (metadata.type !== 'body') return value; // custom interceptor for multer
     const { surah_id, ayah_from, ayah_to } = await value;
 
-    if (!surah_id || !ayah_from || !ayah_to)
-      throw new ForbiddenException('invalid data');
-
     const verses = [ayah_from, ayah_to];
     if (surah_id < 0 || surah_id > 113)
       throw new ForbiddenException('surahid must be 0 : 113 ');
+
     const currentSurah: Surah_Info = await this.cacheService.getItem(
       'lIndex',
-      CacheKeys.SURAHS_INFO_LIST,
-      surah_id,
+      'surahs_info',
+      surah_id.toString(),
     );
 
     const maxVersesCount = currentSurah.versesCount;

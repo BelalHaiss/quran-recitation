@@ -6,12 +6,14 @@ import { Quran_Lesson_Files } from 'src/shared/types/files.types';
 import { QuranLesson } from '@prisma/client';
 import { Lesson_Info } from 'src/shared/types/quran';
 import { QuranRepository } from './quran_lesson_repository';
+import { QuranUtilService } from './quran.util.service';
 
 @Injectable()
 export class QuranLessonService {
   constructor(
     private storageService: StorageService,
     private quranRepository: QuranRepository,
+    private quranUtilService: QuranUtilService,
   ) {}
   async create(
     createQuranLessonDto: CreateQuranLessonDto,
@@ -21,9 +23,12 @@ export class QuranLessonService {
       files,
       createQuranLessonDto,
     );
-
+    const juz_id = await this.quranUtilService.getJuzFromSurah(
+      createQuranLessonDto,
+    );
     return this.quranRepository.create({
       ...createQuranLessonDto,
+      juz_id,
       audio_url,
       pdf_url,
     });
@@ -75,11 +80,5 @@ export class QuranLessonService {
 
   remove(id: number) {
     return this.quranRepository.removeById(id);
-  }
-
-  private getJuzFromSurah(
-    surah: Pick<QuranLesson, 'surah_id' | 'ayah_from' | 'ayah_to'>,
-  ) {
-    const { surah_id, ayah_from, ayah_to } = surah;
   }
 }
