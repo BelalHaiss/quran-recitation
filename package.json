@@ -9,6 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "migrate:dev": "dotenv -e .env.dev -- npx prisma migrate deploy",
+    "docker:build": "docker compose up -f compose.prod.yml -p wratel_prod --force-recreate -d   ",
     "start": "nest start",
     "dev": "docker compose -f compose.dev.yml -p wratel_dev up & NODE_ENV=dev  nest start --watch",
     "start:debug": "nest start --debug --watch",
