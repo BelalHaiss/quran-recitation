@@ -25,6 +25,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
+      no_cache: true
     ports:
       - 5005:5000
     depends_on:
