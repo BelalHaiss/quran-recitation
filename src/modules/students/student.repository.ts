@@ -18,7 +18,9 @@ export class StudentRepository {
         ...studentData,
         user_type: 'STUDENT',
         student: {
-          create: {},
+          create: {
+            student_id: undefined,
+          },
         },
       },
     });

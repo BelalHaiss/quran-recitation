@@ -1,4 +1,4 @@
-import { Gender, Student } from '@prisma/client';
+import { Gender, Prisma, Student } from '@prisma/client';
 import { UserConcated } from 'src/shared/types/user.types';
 import { OmitSameType } from 'src/shared/types/util.types';
 
@@ -14,6 +14,7 @@ export class StudentResDTO implements StudentUser {
   name: string = undefined;
   birthday: Date = undefined;
   phone: string = undefined;
+  memorized: Prisma.JsonValue = '{}';
 
   constructor(studentData: StudentResDTO) {
     const keys = Object.keys(this);

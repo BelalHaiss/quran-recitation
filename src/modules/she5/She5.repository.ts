@@ -18,7 +18,9 @@ export class She5Repository {
         ...she5Data,
         user_type: 'SHE5',
         she5: {
-          create: {},
+          create: {
+            she5_id: undefined,
+          },
         },
       },
     });
