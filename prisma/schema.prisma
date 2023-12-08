@@ -163,7 +163,7 @@ model StudentLesson {
   created_at        DateTime  @default(now())
   endAt             DateTime?
 
-  lesson_type     CategoryType
+  category        CategoryType
   quran_lesson_id Int?
   quran_lesson    QuranLesson? @relation(fields: [quran_lesson_id], references: [lesson_id])
   lesson_id       Int?

@@ -30,4 +30,5 @@ type User_Lesson_tracker = {
   lessonType: CategoryType;
   lesson_id: number;
   isDone: boolean;
+  surah_id?: number;
 }[];

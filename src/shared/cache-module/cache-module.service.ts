@@ -23,7 +23,6 @@ export class CacheService {
     args?: string, // can be index
   ): Promise<any> {
     let val: any;
-
     if (args)
       val = await this.cacheManger.store.client[getMethod as string](key, args);
     else val = await this.cacheManger.store.client[getMethod as string](key);
